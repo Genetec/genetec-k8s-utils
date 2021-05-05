@@ -1,0 +1,30 @@
+name: Go
+
+defaults:
+  run:
+    working-directory: helm-utils
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "helm-utils/**"
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
