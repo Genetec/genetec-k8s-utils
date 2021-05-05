@@ -21,6 +21,13 @@ func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
 	if err != nil {
 		return DockerImage{}, err
 	}
+	if img.Registry == "" {
+		img.Registry = "docker.io"
+	}
+	if img.Tag == "" {
+		img.Tag = "latest"
+	}
+
 	needle := "@sha256"
 	shaIndex := strings.Index(img.Repo, needle)
 	img.Repo = strings.ReplaceAll(img.Repo, `"`, "")

@@ -40,14 +40,6 @@ func ParseImages(buf *bytes.Buffer) (images []DockerImage, err error) {
 
 	for _, match := range results {
 		for j, n := range match {
-			// If there was no registry, assume docker.io and explicit
-			if names[j] == "registry" && n == "" {
-				n = "docker.io"
-			}
-			// If there was no tag, assume latest and explicit
-			if names[j] == "tag" && n == "" {
-				n = "latest"
-			}
 			tempMap[names[j]] = n
 		}
 		img, err := NewDockerImage(tempMap)
