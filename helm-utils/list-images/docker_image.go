@@ -12,7 +12,7 @@ type DockerImage struct {
 	Repo     string `mapstructure:"repo"`
 	Image    string `mapstructure:"image"`
 	Tag      string `mapstructure:"tag"`
-	ShaRef   string
+	ShaRef   string `mapstructure:"sharef"`
 }
 
 func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
