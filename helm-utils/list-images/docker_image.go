@@ -41,15 +41,36 @@ func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
 	return img, nil
 }
 
-func (image DockerImage) PullReference() string {
+func (image DockerImage) PullReferenceWithRegistry() string {
 	if image.ShaRef != "" {
 		return fmt.Sprintf("%s/%s@%s", image.Registry, image.Repo, image.ShaRef)
 	}
 	return fmt.Sprintf("%s/%s:%s", image.Registry, image.Repo, image.Tag)
 }
 
-func (image DockerImage) PushReference() string {
+func (image DockerImage) PushReferenceWithRegistry() string {
 	return fmt.Sprintf("%s/%s:%s", image.Registry, image.Repo, image.Tag)
+}
+
+func (image DockerImage) PullReference(includeRegistry bool) string {
+	var repo string
+	if image.ShaRef != "" {
+		repo = fmt.Sprintf("%s@%s", image.Repo, image.ShaRef)
+	} else {
+		repo = fmt.Sprintf("%s:%s", image.Repo, image.Tag)
+	}
+	if includeRegistry {
+		return fmt.Sprintf("%s/%s", image.Registry, repo)
+	}
+	return repo
+}
+
+func (image DockerImage) PushReference(includeRegistry bool) string {
+	repo := fmt.Sprintf("%s:%s", image.Repo, image.Tag)
+	if includeRegistry {
+		return fmt.Sprintf("%s/%s", image.Registry, repo)
+	}
+	return repo
 }
 
 func (image *DockerImage) RepoAddress() string {

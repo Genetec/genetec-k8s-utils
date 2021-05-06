@@ -42,15 +42,15 @@ var _ = Describe("List images", func() {
 			Expect(img.Registry).To(Equal("docker.io"))
 			Expect(img.Repo).To(Equal("auth/capstan"))
 			Expect(img.Tag).To(Equal("latest"))
-			Expect(img.PullReference()).To(Equal("docker.io/auth/capstan:latest"))
-			Expect(img.PushReference()).To(Equal("docker.io/auth/capstan:latest"))
+			Expect(img.PullReference(true)).To(Equal("docker.io/auth/capstan:latest"))
+			Expect(img.PushReference(true)).To(Equal("docker.io/auth/capstan:latest"))
 
 			img = dockerImages[1]
 			Expect(img.Registry).To(Equal("127.0.0.1:30000"))
 			Expect(img.Repo).To(Equal("capstan"))
 			Expect(img.Tag).To(Equal("0.1.0.0"))
-			Expect(img.PullReference()).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
-			Expect(img.PushReference()).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
+			Expect(img.PullReference(true)).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
+			Expect(img.PushReference(true)).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
 		})
 	})
 	Context("An image with a sha reference", func() {
@@ -64,8 +64,31 @@ var _ = Describe("List images", func() {
 			img := dockerImages[0]
 			Expect(img.Repo).To(Equal("toto/busybox"))
 			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
-			Expect(img.PullReference()).To(Equal("docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
-			Expect(img.PushReference()).To(Equal("docker.io/toto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PullReference(true)).To(Equal("docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PushReference(true)).To(Equal("docker.io/toto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+		})
+	})
+	Context("Registry is excluded", func() {
+		BeforeEach(func() {
+			str = `containers:
+    - name: capstan
+      image: "docker.io/atoto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"
+			image: "docker.io/btoto/busybox:v1.2.3
+         `
+		})
+		It("Has a ShaRef and an appropriate Pull and Push Reference", func() {
+			img := dockerImages[0]
+			Expect(img.Repo).To(Equal("atoto/busybox"))
+			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PullReference(false)).To(Equal("atoto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PushReference(false)).To(Equal("atoto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+
+			img = dockerImages[1]
+			Expect(img.Repo).To(Equal("btoto/busybox"))
+			Expect(img.ShaRef).To(Equal(""))
+			Expect(img.PullReference(false)).To(Equal("btoto/busybox:v1.2.3"))
+			Expect(img.PushReference(false)).To(Equal("btoto/busybox:v1.2.3"))
+
 		})
 	})
 })
