@@ -36,6 +36,7 @@ func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
 		// Skipping the "@"
 		img.ShaRef = img.Repo[shaIndex+1:] + ":" + img.Tag
 		img.Repo = img.Repo[:shaIndex]
+		img.Image = strings.ReplaceAll(img.Image, "@sha256", "")
 	}
 
 	return img, nil

@@ -63,6 +63,7 @@ var _ = Describe("List images", func() {
 		It("has a ShaRef and an appropriate Pull and Push Reference", func() {
 			img := dockerImages[0]
 			Expect(img.Repo).To(Equal("toto/busybox"))
+			Expect(img.Image).To(Equal("busybox"))
 			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
 			Expect(img.PullReference(true)).To(Equal("docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
 			Expect(img.PushReference(true)).To(Equal("docker.io/toto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
