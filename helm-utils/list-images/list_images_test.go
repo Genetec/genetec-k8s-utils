@@ -60,7 +60,7 @@ var _ = Describe("List images", func() {
       image: "docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"
          `
 		})
-		It("Has a ShaRef and an appropriate Pull and Push Reference", func() {
+		It("has a ShaRef and an appropriate Pull and Push Reference", func() {
 			img := dockerImages[0]
 			Expect(img.Repo).To(Equal("toto/busybox"))
 			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
@@ -76,7 +76,7 @@ var _ = Describe("List images", func() {
 			image: "docker.io/btoto/busybox:v1.2.3
          `
 		})
-		It("Has a ShaRef and an appropriate Pull and Push Reference", func() {
+		It("has no registry in for its pull or push reference", func() {
 			img := dockerImages[0]
 			Expect(img.Repo).To(Equal("atoto/busybox"))
 			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))

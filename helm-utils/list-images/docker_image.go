@@ -41,17 +41,7 @@ func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
 	return img, nil
 }
 
-func (image DockerImage) PullReferenceWithRegistry() string {
-	if image.ShaRef != "" {
-		return fmt.Sprintf("%s/%s@%s", image.Registry, image.Repo, image.ShaRef)
-	}
-	return fmt.Sprintf("%s/%s:%s", image.Registry, image.Repo, image.Tag)
-}
-
-func (image DockerImage) PushReferenceWithRegistry() string {
-	return fmt.Sprintf("%s/%s:%s", image.Registry, image.Repo, image.Tag)
-}
-
+// Returns a valid docker pull reference including the sha reference in case there is one
 func (image DockerImage) PullReference(includeRegistry bool) string {
 	var repo string
 	if image.ShaRef != "" {
@@ -65,6 +55,7 @@ func (image DockerImage) PullReference(includeRegistry bool) string {
 	return repo
 }
 
+// Returns a valid docker push reference using the sha as tag if the sha reference was present
 func (image DockerImage) PushReference(includeRegistry bool) string {
 	repo := fmt.Sprintf("%s:%s", image.Repo, image.Tag)
 	if includeRegistry {
@@ -73,6 +64,7 @@ func (image DockerImage) PushReference(includeRegistry bool) string {
 	return repo
 }
 
+// Returns only the registry and the repository
 func (image *DockerImage) RepoAddress() string {
 	return fmt.Sprintf("%s/%s", image.Registry, image.Repo)
 }
