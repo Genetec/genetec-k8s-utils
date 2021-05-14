@@ -5,6 +5,8 @@
 *.so
 *.dylib
 
+go-report.xml
+
 # Test binary, built with `go test -c`
 *.test
 
