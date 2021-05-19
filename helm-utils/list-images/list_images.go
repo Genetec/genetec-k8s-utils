@@ -31,7 +31,7 @@ func ParseImages(buf *bytes.Buffer) (images []DockerImage, err error) {
 		}
 	}()
 	// We want to match the repo name, the image name, the tag name: docker.io/redis:latest -> docker.io | redis | latest
-	regex := regexp.MustCompile(`(?m)^\s*image:\s*(?:"|')?(?:(?P<registry>.*?\..+?)\/)?(?:(?P<repo>(?:.*\/)?(?P<image>[^\s:]+)))(?:(?:\s*:\s*)(?P<tag>[^"'\s]+)*(?:"|')?\s*)?$`)
+	regex := regexp.MustCompile(`(?m)^\s*image:\s*(?:"|')?(?:(?P<registry>.*?\..+?|localhost(?::\d+)?)\/)?(?:(?P<repo>(?:.*\/)?(?P<image>[^\s:]+)))(?:(?:\s*:\s*)(?P<tag>[^"'\s]+)*(?:"|')?\s*)?$`)
 	results := regex.FindAllStringSubmatch(buf.String(), -1)
 	names := regex.SubexpNames()
 

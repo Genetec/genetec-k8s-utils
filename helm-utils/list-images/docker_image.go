@@ -17,7 +17,7 @@ type DockerImage struct {
 }
 
 var (
-	imageRegex *regexp.Regexp = regexp.MustCompile(`^(?:(?P<registry>.*?\..+?)\/)?(?:(?P<repo>(?:.*\/)?(?P<image>[^\s:]+)))(?:(?:\s*:\s*)(?P<tag>[^"'\s]+)*(?:"|')?\s*)?$`)
+	imageRegex *regexp.Regexp = regexp.MustCompile(`^(?:(?P<registry>.*?\..+?|localhost(?::\d+)?)\/)?(?:(?P<repo>(?:.*\/)?(?P<image>[^\s:]+)))(?:(?:\s*:\s*)(?P<tag>[^"'\s]+)*(?:"|')?\s*)?$`)
 )
 
 func NewDockerImageFromString(input string) (DockerImage, error) {

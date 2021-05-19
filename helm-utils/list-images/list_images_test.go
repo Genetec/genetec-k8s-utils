@@ -127,4 +127,25 @@ var _ = Describe("List images", func() {
 			Expect(img.PushReference(true)).To(Equal("docker.io/toto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
 		})
 	})
+	Context("Make DockerImage from localhost string", func() {
+		var img DockerImage
+		BeforeEach(func() {
+			str = `localhost:30000/capstan:0.1.0.0`
+			img, _ = NewDockerImageFromString(str)
+		})
+		It("has no empty fields", func() {
+			Expect(img.Repo).ToNot(BeEmpty())
+			Expect(img.Registry).ToNot(BeEmpty())
+			Expect(img.Image).ToNot(BeEmpty())
+			Expect(img.Tag).ToNot(BeEmpty())
+			Expect(img.ShaRef).To(BeEmpty())
+		})
+		It("has good values for its fields", func() {
+			Expect(img.Registry).To(Equal("localhost:30000"))
+			Expect(img.Repo).To(Equal("capstan"))
+			Expect(img.Tag).To(Equal("0.1.0.0"))
+			Expect(img.PullReference(true)).To(Equal("localhost:30000/capstan:0.1.0.0"))
+			Expect(img.PushReference(true)).To(Equal("localhost:30000/capstan:0.1.0.0"))
+		})
+	})
 })
