@@ -92,4 +92,60 @@ var _ = Describe("List images", func() {
 
 		})
 	})
+	Context("Make DockerImage from string", func() {
+		var img DockerImage
+		BeforeEach(func() {
+			str = `127.0.0.1:30000/capstan:0.1.0.0`
+			img, _ = NewDockerImageFromString(str)
+		})
+		It("has no empty fields", func() {
+			Expect(img.Repo).ToNot(BeEmpty())
+			Expect(img.Registry).ToNot(BeEmpty())
+			Expect(img.Image).ToNot(BeEmpty())
+			Expect(img.Tag).ToNot(BeEmpty())
+			Expect(img.ShaRef).To(BeEmpty())
+		})
+		It("has good values for its fields", func() {
+			Expect(img.Registry).To(Equal("127.0.0.1:30000"))
+			Expect(img.Repo).To(Equal("capstan"))
+			Expect(img.Tag).To(Equal("0.1.0.0"))
+			Expect(img.PullReference(true)).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
+			Expect(img.PushReference(true)).To(Equal("127.0.0.1:30000/capstan:0.1.0.0"))
+		})
+	})
+	Context("Make DockerImage from sha256 string", func() {
+		var img DockerImage
+		BeforeEach(func() {
+			str = `docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f`
+			img, _ = NewDockerImageFromString(str)
+		})
+		It("has a ShaRef and an appropriate Pull and Push Reference", func() {
+			Expect(img.Repo).To(Equal("toto/busybox"))
+			Expect(img.Image).To(Equal("busybox"))
+			Expect(img.ShaRef).To(Equal("sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PullReference(true)).To(Equal("docker.io/toto/busybox@sha256:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+			Expect(img.PushReference(true)).To(Equal("docker.io/toto/busybox:c5439d7db88ab5423999530349d327b04279ad3161d7596d2126dfb5b02bfd1f"))
+		})
+	})
+	Context("Make DockerImage from localhost string", func() {
+		var img DockerImage
+		BeforeEach(func() {
+			str = `localhost:30000/capstan:0.1.0.0`
+			img, _ = NewDockerImageFromString(str)
+		})
+		It("has no empty fields", func() {
+			Expect(img.Repo).ToNot(BeEmpty())
+			Expect(img.Registry).ToNot(BeEmpty())
+			Expect(img.Image).ToNot(BeEmpty())
+			Expect(img.Tag).ToNot(BeEmpty())
+			Expect(img.ShaRef).To(BeEmpty())
+		})
+		It("has good values for its fields", func() {
+			Expect(img.Registry).To(Equal("localhost:30000"))
+			Expect(img.Repo).To(Equal("capstan"))
+			Expect(img.Tag).To(Equal("0.1.0.0"))
+			Expect(img.PullReference(true)).To(Equal("localhost:30000/capstan:0.1.0.0"))
+			Expect(img.PushReference(true)).To(Equal("localhost:30000/capstan:0.1.0.0"))
+		})
+	})
 })

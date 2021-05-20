@@ -2,6 +2,7 @@ package list_images
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	ms "github.com/mitchellh/mapstructure"
@@ -13,6 +14,23 @@ type DockerImage struct {
 	Image    string `mapstructure:"image"`
 	Tag      string `mapstructure:"tag"`
 	ShaRef   string `mapstructure:"sharef"`
+}
+
+var (
+	imageRegex *regexp.Regexp = regexp.MustCompile(`^(?:(?P<registry>.*?\..+?|localhost(?::\d+)?)\/)?(?:(?P<repo>(?:.*\/)?(?P<image>[^\s:]+)))(?:(?:\s*:\s*)(?P<tag>[^"'\s]+)*(?:"|')?\s*)?$`)
+)
+
+func NewDockerImageFromString(input string) (DockerImage, error) {
+	result := imageRegex.FindStringSubmatch(input)
+	names := imageRegex.SubexpNames()
+
+	tempMap := map[string]string{}
+
+	for i, n := range result {
+		tempMap[names[i]] = n
+	}
+
+	return NewDockerImage(tempMap)
 }
 
 func NewDockerImage(imageMap map[string]string) (DockerImage, error) {
