@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: configmap
+spec:
+  containers:
+    - name: {{ .Chart.Name }}
+      image: docker.io/testData1:v1.2.1
+---
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: secrets
+spec:
+  containers:
+    - name: {{ .Chart.Name }}
+      image: docker.io/testData1:v1.2.2
+---
+{{- if .Values.rawvalues }}
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: rawvalues
+spec:
+  containers:
+    - name: {{ .Chart.Name }}
+      image: docker.io/testData1:v1.2.3
+{{- end }}
