@@ -1,3 +1,4 @@
+{{- if .Values.configMapValues }}
 apiVersion: apps/v1
 kind: Pod
 metadata:
@@ -6,7 +7,9 @@ spec:
   containers:
     - name: {{ .Chart.Name }}
       image: docker.io/testData1:v1.2.1
+{{- end }}
 ---
+{{- if .Values.secretValues }}
 apiVersion: apps/v1
 kind: Pod
 metadata:
@@ -15,6 +18,7 @@ spec:
   containers:
     - name: {{ .Chart.Name }}
       image: docker.io/testData1:v1.2.2
+{{- end }}
 ---
 {{- if .Values.rawvalues }}
 apiVersion: apps/v1
