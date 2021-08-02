@@ -1,0 +1,3 @@
+configMapValues: true
+secretValues: true
+rawvalues: false

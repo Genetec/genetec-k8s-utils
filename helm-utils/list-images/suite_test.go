@@ -24,9 +24,10 @@ func TestListImages(t *testing.T) {
 
 func TestListImagesWithValues(t *testing.T) {
 
-	images, err := ListChartImages("/usr/local/bin/helm", "../../toe-0.1.0.tgz", []string{"--values", "../../toe/values.yaml"})
+	images, err := ListChartImages("/usr/local/bin/helm", "./test-0.1.0.tgz", []string{"-f", "../../test/values.yaml"})
 	if err != nil {
 		fmt.Println(err, "Error while listing chart images")
+		t.Fail()
 	}
 	for _, image := range images {
 		if image.Tag == "v1.2.3" {
@@ -37,17 +38,18 @@ func TestListImagesWithValues(t *testing.T) {
 
 func TestListImagesWithoutValues(t *testing.T) {
 
-	images, err := ListChartImages("/usr/local/bin/helm", "../../toe-0.1.0.tgz", []string{})
+	images, err := ListChartImages("/usr/local/bin/helm", "./test-0.1.0.tgz", []string{})
 	if err != nil {
 		fmt.Println(err, "Error while listing chart images")
+		t.Fail()
 	}
-	containsRegistry := false
+	tagFound := false
 	for _, image := range images {
 		if image.Tag == "v1.2.3" {
-			containsRegistry = true
+			tagFound = true
 		}
 	}
-	if !containsRegistry {
+	if !tagFound {
 		t.Fail()
 	}
 }
