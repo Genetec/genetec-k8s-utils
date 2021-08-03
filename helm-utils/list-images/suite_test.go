@@ -24,7 +24,7 @@ func TestListImages(t *testing.T) {
 
 func TestListImagesWithValues(t *testing.T) {
 
-	images, err := ListChartImages("/usr/local/bin/helm", "./test-0.1.0.tgz", []string{"-f", "../../test/values.yaml"})
+	images, err := ListChartImages("/usr/local/bin/helm", "./test-0.1.0.tgz", []string{"-f", "./test-values.yaml"})
 	if err != nil {
 		fmt.Println(err, "Error while listing chart images")
 		t.Fail()

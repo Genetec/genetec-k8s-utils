@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: configmap
+  name: configMap
 spec:
   containers:
     - name: {{ .Chart.Name }}
@@ -20,11 +20,11 @@ spec:
       image: docker.io/testData1:v1.2.2
 {{- end }}
 ---
-{{- if .Values.rawvalues }}
+{{- if .Values.rawValues }}
 apiVersion: apps/v1
 kind: Pod
 metadata:
-  name: rawvalues
+  name: rawValues
 spec:
   containers:
     - name: {{ .Chart.Name }}
